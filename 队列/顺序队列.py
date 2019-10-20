@@ -39,9 +39,29 @@ class Queue(object):
             self._head += 1
             print("出队元素为：", elem)
 
+    def enqueue_2(self, elem):
+        """
+        当无法队未满，但无法插入元素时，在入队时进行数据搬移。
+        :return:
+        """
+        if self._tail == self._lenth:
+            if self._head == 0:  # 队满
+                return False
+            for i in range(self._head, self._tail):
+                idx = int(i - self._head)
+                self._queue[idx] = self._queue[i]  # 数据搬移操作
+
+            self._tail -= self._head
+            self._head = 0
+        self._queue[self._tail] = elem
+        self._tail += 1
+
     def scan(self):
-        for elem in range(self._head+1, self._tail+1):
-            print(elem, end=' ')
+        for elem in range(self._head, self._tail):
+            print(self._queue[elem], end=' ')
+        print()
+        print('队头下标为：', self._head)
+        print('队尾下标为：', self._tail)
 
 
 if __name__ == '__main__':
@@ -66,9 +86,26 @@ if __name__ == '__main__':
     myqueue.enqueue(2)
 
     myqueue.dequeue()
-    print("进行出队操作后，队中元素为：")
+    print("第一次进行出队操作后，队中元素为：")
     myqueue.scan()
 
     myqueue.dequeue()
-    print("进行出队操作后，队中元素为：")
+    print("第二次进行出队操作后，队中元素为：")
     myqueue.scan()
+
+    myqueue.dequeue()
+    print("第三次进行出队操作后，队中元素为：")
+    myqueue.scan()
+
+    myqueue.enqueue(2)
+    print("可以看到，此时队头还有空位，但无法入队")
+    print()
+
+    print("-" * 40)
+    print("下面采用enqueue_2（），可以在上述情况下，执行出队操作时进行数据搬移")
+
+    myqueue.enqueue_2(2)
+    print("进行插入元素后，队中元素尾：")
+    myqueue.scan()
+
+    print("-" * 40)
